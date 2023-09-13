@@ -5,6 +5,7 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich.console import Group
 from rich.console import Console
+import time
 
 
 class CodeBlock:
@@ -20,7 +21,9 @@ class CodeBlock:
     self.active_line = None
 
     self.live = Live(auto_refresh=False, console=Console(), vertical_overflow="visible")
-    self.live.start()
+    print('++start live++', flush=True)
+    time.sleep(0.01)
+    # self.live.start()
 
   def update_from_message(self, message):
     if "function_call" in message and "parsed_arguments" in message[
@@ -36,9 +39,11 @@ class CodeBlock:
           self.refresh()
 
   def end(self):
+    print('++stop live++', flush=True)
+    time.sleep(0.01)
     self.refresh(cursor=False)
     # Destroys live display
-    self.live.stop()
+    # self.live.stop()
 
   def refresh(self, cursor=True):
     # Get code, return if there is none
@@ -88,5 +93,7 @@ class CodeBlock:
     )
 
     # Update the live display
-    self.live.update(group)
-    self.live.refresh()
+    # self.live.update(group)
+    # self.live.refresh()
+    print(f"~~~{self.language}\n{code}\n~~~", flush=True)
+    time.sleep(0.01)

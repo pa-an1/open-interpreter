@@ -18,12 +18,13 @@ Especially if you have ideas and **EXCITEMENT** about the future of this project
 - killian
 """
 
-from .cli import cli
-from .utils import merge_deltas, parse_partial_json
-from .message_block import MessageBlock
-from .code_block import CodeBlock
-from .code_interpreter import CodeInterpreter
-from .get_hf_llm import get_hf_llm
+
+from cli import cli
+from utils import merge_deltas, parse_partial_json
+from message_block import MessageBlock
+from code_block import CodeBlock
+from code_interpreter import CodeInterpreter
+from get_hf_llm import get_hf_llm
 
 
 import os
@@ -42,6 +43,23 @@ import tokentrim as tt
 from rich import print
 from rich.markdown import Markdown
 from rich.rule import Rule
+from builtins import print as builtin_print
+from builtins import input as builtin_input
+
+def print(*args, **kwargs):
+  kwargs['flush'] = True
+  builtin_print(*args, **kwargs)
+
+def input(*args, **kwargs):
+  user_input = builtin_input(*args, **kwargs)
+  print(f"[{user_input}](qute)\n\n")
+  return user_input
+
+def Markdown(text):
+  return text
+
+def Rule(style):
+  return "\n---\n"
 
 # Function schema for gpt-4
 function_schema = {
@@ -477,7 +495,7 @@ class Interpreter:
           print(Rule(style="white"))
 
           print(Markdown(missing_api_key_message), '', Rule(style="white"), '')
-          response = input("OpenAI API key: ")
+          response = input("OpenAI API key: \n\n")
 
           if response == "":
               # User pressed `enter`, requesting Code-Llama
@@ -834,7 +852,9 @@ class Interpreter:
             code = self.active_block.code
 
             # Prompt user
+            time.sleep(0.01)
             response = input("  Would you like to run this code? (y/n)\n\n  ")
+            time.sleep(0.01)
             print("")  # <- Aesthetic choice
 
             if response.strip().lower() == "y":
@@ -919,3 +939,7 @@ class Interpreter:
   def _print_welcome_message(self):
     current_version = pkg_resources.get_distribution("open-interpreter").version
     print(f"\n Hello, Welcome to [bold]● Open Interpreter[/bold]. (v{current_version})\n")
+
+if __name__ == "__main__":
+  interpreter = Interpreter()
+  interpreter.chat()

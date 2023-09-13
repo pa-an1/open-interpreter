@@ -29,6 +29,17 @@ from rich.markdown import Markdown
 import os
 import inquirer
 from huggingface_hub import list_files_info, hf_hub_download
+from builtins import print as builtin_print
+
+def print(*args, **kwargs):
+  kwargs['flush'] = True
+  builtin_print(*args, **kwargs)
+
+def Markdown(text):
+  return text
+
+def Rule(style):
+  return "\n---\n"
 
 
 def get_hf_llm(repo_id, debug_mode, context_window):

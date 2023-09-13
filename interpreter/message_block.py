@@ -4,13 +4,16 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 from rich.box import MINIMAL
 import re
+import time
 
 
 class MessageBlock:
 
   def __init__(self):
     self.live = Live(auto_refresh=False, console=Console())
-    self.live.start()
+    print('++start live++', flush=True)
+    time.sleep(0.01)
+    # self.live.start()
     self.content = ""
 
   def update_from_message(self, message):
@@ -19,8 +22,13 @@ class MessageBlock:
       self.refresh()
 
   def end(self):
+    if self.live == None:
+      return
+    self.live = None
+    print('++stop live++', flush=True)
+    time.sleep(0.01)
     self.refresh(cursor=False)
-    self.live.stop()
+    # self.live.stop()
 
   def refresh(self, cursor=True):
     # De-stylize any code blocks in markdown,
@@ -30,10 +38,12 @@ class MessageBlock:
     if cursor:
       content += "█"
       
-    markdown = Markdown(content.strip())
-    panel = Panel(markdown, box=MINIMAL)
-    self.live.update(panel)
-    self.live.refresh()
+    print(content.strip(), flush=True)
+    time.sleep(0.01)
+    # markdown = Markdown(content.strip())
+    # panel = Panel(markdown, box=MINIMAL)
+    # self.live.update(panel)
+    # self.live.refresh()
 
 
 def textify_markdown_code_blocks(text):

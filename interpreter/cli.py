@@ -27,6 +27,17 @@ import pkg_resources
 from rich import print as rprint
 from rich.markdown import Markdown
 import inquirer
+from builtins import print as builtin_print
+
+def rprint(*args, **kwargs):
+  kwargs['flush'] = True
+  builtin_print(*args, **kwargs)
+
+def Markdown(text):
+  return text
+
+def Rule(style):
+  return "\n---\n"
 
 # Load .env file
 load_dotenv()
