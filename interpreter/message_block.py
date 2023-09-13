@@ -36,7 +36,7 @@ class MessageBlock:
     content = textify_markdown_code_blocks(self.content)
     
     if cursor:
-      content += "█"
+      content += "|"
       
     print(content.strip(), flush=True)
     time.sleep(0.01)
